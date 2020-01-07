@@ -72,7 +72,7 @@ def translate(text, source, target):
 
 def parse_args():
     parser = ArgumentParser()
-    subcommand = parser.add_subparsers(title="command", dest="command")
+    subcommand = parser.add_subparsers(title="command", dest="command", required=True)
 
     query_cmd = subcommand.add_parser("query", help="search given text on google")
     query_cmd.add_argument(
