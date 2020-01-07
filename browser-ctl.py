@@ -120,10 +120,10 @@ def main():
             text=args.text, source=args.source, target=args.target
         ),
         "query": lambda args: auto_query(msg=args.query, site=args.site),
-        "whatsapp": lambda _x: open_browser("http://web.whatsapp.com"),
-        "open": lambda _x: open_browser("https://www.google.com"),
-        "mail": lambda _x: open_browser("https://mail.google.com/"),
-        "cal": lambda _x: open_browser("https://calendar.google.com/"),
+        "whatsapp": lambda _: open_browser("http://web.whatsapp.com"),
+        "open": lambda _: open_browser("https://www.google.com"),
+        "mail": lambda _: open_browser("https://mail.google.com/"),
+        "cal": lambda _: open_browser("https://calendar.google.com/"),
     }
 
     handler = handlers[args.command]
