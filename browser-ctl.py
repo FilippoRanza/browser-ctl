@@ -70,6 +70,15 @@ def translate(text, source, target):
     open_browser(url)
 
 
+def search_wikipedia(query, language):
+    if not query:
+        query = pyperclip.paste()
+
+    query = build_query(query, None)
+    url = f"https://{language}.wikipedia.org/w/index.php?search={query}"
+    open_browser(url)
+
+
 def parse_args():
     parser = ArgumentParser()
     subcommand = parser.add_subparsers(title="command", dest="command", required=True)
@@ -110,6 +119,10 @@ def parse_args():
     subcommand.add_parser("mail", help="open a Gmail web page")
     subcommand.add_parser("cal", help="open a Google Calendar web page")
 
+    wiki_cmd = subcommand.add_parser("wiki", help="search given text (or cliboard) on wikipedia")
+    wiki_cmd.add_argument('-l', '--lang', help="specify wikipedia language", default="en")
+    wiki_cmd.add_argument('-q', '--query', help="text to search on wikipedia, if omitted read from clipboard")
+
     return parser.parse_args()
 
 
@@ -124,6 +137,7 @@ def main():
         "open": lambda _: open_browser("https://www.google.com"),
         "mail": lambda _: open_browser("https://mail.google.com/"),
         "cal": lambda _: open_browser("https://calendar.google.com/"),
+        "wiki" : lambda args : search_wikipedia(args.query, args.lang)
     }
 
     handler = handlers[args.command]
