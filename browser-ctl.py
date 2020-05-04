@@ -21,7 +21,7 @@ def browser_name():
 def open_browser(url):
     webbrowser.open_new_tab(url)
     browser = browser_name()
-    if os.name == 'posix':
+    if os.name == "posix":
         run(["wmctrl", "-a", browser])
 
 
@@ -70,6 +70,17 @@ def translate(text, source, target):
     open_browser(url)
 
 
+def open_page(url):
+    if url is None:
+        open_browser("https://www.google.com")
+    else:
+        if not (url.startswith("http://") or url.startswith("https://")):
+            url = "http://" + url
+
+        if is_website(url):
+            open_browser(url)
+
+
 def parse_args():
     parser = ArgumentParser()
     subcommand = parser.add_subparsers(title="command", dest="command", required=True)
@@ -105,8 +116,12 @@ def parse_args():
         help="text to translate from source to target language, if omitted read from clipboard",
     )
 
+    open_cmd = subcommand.add_parser("open", help="open a Google web page")
+    open_cmd.add_argument(
+        "-s", "--site", help="specify web page to open, defaults to www.google.com"
+    )
+
     subcommand.add_parser("whatsapp", help="open a Whatsapp web page")
-    subcommand.add_parser("open", help="open a Google web page")
     subcommand.add_parser("mail", help="open a Gmail web page")
     subcommand.add_parser("cal", help="open a Google Calendar web page")
 
@@ -121,7 +136,7 @@ def main():
         ),
         "query": lambda args: auto_query(msg=args.query, site=args.site),
         "whatsapp": lambda _: open_browser("http://web.whatsapp.com"),
-        "open": lambda _: open_browser("https://www.google.com"),
+        "open": lambda args: open_page(url=args.site),
         "mail": lambda _: open_browser("https://mail.google.com/"),
         "cal": lambda _: open_browser("https://calendar.google.com/"),
     }
